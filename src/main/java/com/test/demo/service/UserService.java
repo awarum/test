@@ -15,18 +15,20 @@ import java.util.List;
 @Service
 public class UserService {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public UserDTO save(String username, String password) {
+    public UserDTO save(String name, String password) {
 
-        User user = new User();
-        user.setHashedPassword(hash(username, password));
-        user.setName(username);
+        User user = new User(name, hash(name, password));
         User saved = userRepository.save(user);
 
         UserDTO userDTO = new UserDTO();
